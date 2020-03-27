@@ -1,7 +1,6 @@
 //index.js
 var dataUrl = 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46'
 var util = require("../../utils/util.js");
-
 //更改数组 第三个参数是对象
 function editArr(arr,i,editCnt){
   let newArr = arr,editingObj = newArr[i];   
@@ -14,9 +13,15 @@ function editArr(arr,i,editCnt){
 //获取应用实例
 var app = getApp()
 Page({
+  
   data: { 
     multiArray:[['重要', '非重要'], ['紧急', '非紧急']], //优先级列表 
     multiIndex: [0, 0], //存放用户选择的结果
+    sortStyle:0, // 排序方式，按默认顺序0，按时间顺序1，按事件级别顺序2
+    sortWord:[
+      '按时间先后排序',
+      '按事件等级排序',
+      '按提交先后排序'],
     userInfo: {},
     curIpt:'',
     showAll:true,
@@ -33,6 +38,7 @@ Page({
     })
   },
   onLoad: function () {
+    // getApp().setWatcher(this.data, this.watch); // 设置监听器
     var that = this;
     //获取之前保留在缓存里的数据
     wx.getStorage({
@@ -52,6 +58,19 @@ Page({
       })
     })
   },
+  // watch: {
+  //   sortStyle: function (newValue) {
+  //     console.log(this.data.lists);
+  //     if(newVal === 0){ //默认排序
+
+  //     }else if(newValue === 1){ //按时间排序
+
+  //     }else if(newValue === 2){ //按事件级别排序
+
+  //     }
+  //     console.log(newValue); // name改变时，调用该方法输出新值。
+  //   }
+  // },
   iptChange(e){ 
     this.subIptChange(e.detail.value);
     // let timeArr = util.setTimeHalf();   
@@ -175,6 +194,66 @@ Page({
       key:'todolist',
       data:listsArr
     })
-  }
+  },
+  //改变事件排序方式
+  changeSortStyle(){
+    let _this = this;
+    let sortStyle = this.data.sortStyle;
+    sortStyle = (sortStyle + 1) % 3;
+    _this.setData({
+      sortStyle: sortStyle
+    });
+    console.log("排序方式：" + sortStyle)
+    let resultList = [];
+    if (sortStyle == 0){ // 默认排序
+      resultList = _this.data.lists.sort(_this.sortBy('id'));
+    }else if(sortStyle == 1){ // 按时间先后排序
+      resultList = _this.data.lists.sort(_this.sortByTime('beginTime'));
+    }else{ // 按事件等级排序
+      resultList = _this.data.lists.sort(_this.sortByEventLevels('type'));
+    }
+    _this.setData({ // 赋值改变原列表顺序
+      lists: resultList
+    });
+    console.log(resultList)
+  },
+  sortBy(props){
+    return function (b, a) {
+      return b[props] - a[props]; // 后值减前值大于0，不用换，反之亦然
+    }
+  },
+  sortByEventLevels(props) {
+    return function (b, a) { //b是后一个值，a是前一个值
+      let num1 = a[props][0] * 2 + a[props][1];
+      let num2 = b[props][0] * 2 + b[props][1];
+      if(num1 - num2 > 0){
+        return -1;
+      }else{
+        return 1;
+      }
+    }
+  },
+  sortByTime(props) {
+    return function (b, a) {
+      console.log(time1)
+      let time1 = a[props].split(":");
+      let time2 = b[props].split(":");
+      console.log(time1)
+      console.log(time2)
+      let result = 0;
+      if (parseInt(time1[0]) < parseInt(time2[0])){
+        result = 1; // 小的时间在前，不用换
+      }else if (parseInt(time1[0]) > parseInt(time2[0])){
+        result = -1; // 反之需要交换
+      }else{ // 当时钟相等时比较分钟
+        if (parseInt(time1[1]) < parseInt(time2[1])){
+          result = 1; // 不用换
+        }else{
+          result = -1;
+        }
+      }
+      return result; 
+    }
+  },
   
 })

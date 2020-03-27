@@ -56,6 +56,9 @@
         <view class="ft-area">
             <text>{{lists.length}}条</text>
         </view>
+        <view class="ft-area">
+            <text bindtap="changeSortStyle" class="ft-action">{{sortWord[sortStyle]}}</text>
+        </view>
          <view class="ft-area ft-mid">
             <text wx:if="{{showAll}}" bindtap="showUnfinished" class="ft-action">显示未完成</text>
             <text wx:else bindtap="showAll" class="ft-action">显示全部</text>
