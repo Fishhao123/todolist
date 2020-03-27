@@ -12,16 +12,27 @@
       <button type="primary" size="mini" plain="true" id="工作" bindtap='defaultButtonOnClick'>工作</button>
       <button type="primary" size="mini" plain="true" id="阅读" bindtap='defaultButtonOnClick'>阅读</button>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">
-        <picker range='{{curRange}}' value='{{curBegin}}' bindchange='beginChange'  class="pick-time time">
+        <picker mode="date" value="{{begindate}}" type="begin" bindchange="beginDateChange"  class="pick-time time">
           <text>
-              开始时间：{{curRange[curBegin]}}
+              开始日期：{{begindate}}
           </text>
-        </picker>  
-        <picker range='{{curRange}}' value='{{curFinish}}' bindchange='finishChange'  class="pick-time time">
+        </picker>
+        <picker mode="time" value="{{begintime}}" start="{{begindate}}" bindchange="beginTimeChange"  class="pick-time time">
           <text>
-              结束时间：{{curRange[curFinish]}}
+              开始时间：{{begintime}}
           </text>
-        </picker>  
+        </picker>
+        <picker mode="date" value="{{enddate}}" bindchange="endDateChange"  class="pick-time time">
+          <text>
+              结束日期：{{enddate}}
+          </text>
+        </picker>
+        <picker mode="time" value="{{endtime}}" bindchange="endTimeChange"  class="pick-time time">
+          <text>
+              结束时间：{{endtime}}
+          </text>
+        </picker>
+
         <label class="time"><switch class="switch" checked bindchange="switch1Change" />提醒</label>
       </view>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">
@@ -45,7 +56,9 @@
             <button class="btn btn-edit" data-id="{{index}}" bindtap="saveEdit">修改</button>
         </view>
         
-        <text class="time"> {{item.beginTime}}-{{item.finishTime}}</text>
+        <text style="font-size:12px">\n开始时间<text class="time">{{item.beginTime}}</text></text>
+        <text style="font-size:12px">\n结束时间<text class="time">{{item.finishTime}}</text></text>
+        <text style="font-size:12px">\n紧急/重要指示:  </text>
         <icon wx:if="{{item.type[0]===0}}" type="warn" size="20"/>
         <icon wx:if="{{item.type[1]===0}}" type="waiting" size="20"/>
         <!-- <text> {{multiArray[0][item.type[0]]}} {{multiArray[1][item.type[1]]}}</text> -->
@@ -54,7 +67,7 @@
     </view>
     <view class="footer">
         <view class="ft-area">
-            <text>{{lists.length}}条</text>
+            <text class="ft-action">{{lists.length}}条</text>
         </view>
          <view class="ft-area ft-mid">
             <text wx:if="{{showAll}}" bindtap="showUnfinished" class="ft-action">显示未完成</text>

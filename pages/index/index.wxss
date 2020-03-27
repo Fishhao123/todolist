@@ -171,6 +171,7 @@
 .ft-action{
   color: #6fa6cf; 
   margin: 0 10rpx;
+  font-size: 12px
 }
 .ft-area{  
   padding: 20rpx;

@@ -16,7 +16,7 @@ function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
-
+//返回每一个时间的半点
 function halfHour(){
   let timeArr = [];
   for (let i =0; i<=48; i++){
@@ -28,19 +28,20 @@ function halfHour(){
   }
   return timeArr;
 }
-let timeArr = halfHour();
+let timeArr = halfHour();//timeArr包含每天24小时所有的半点
 
-function setTimeHalf(){
-  var thisDate = new Date(), thisTime = formatTime(thisDate),lastTimeArr = [],index = 0;
+function setTimeHalf(){//
+  //new Date()获取当前时间，thisTime = [现在时刻小时，现在时刻分钟]
+  var thisDate = new Date(), thisTime = formatTime(thisDate), lastTimeArr = [], index = 0;
   
- timeArr.map(function(t,i){
+  timeArr.map(function(t,i){
     let tArr = t.split(":");
     if (thisTime[0] >= Number(tArr[0])){
       index = thisTime[1]<=30?i:i+1;
     }
- })
- lastTimeArr = timeArr.slice(index);
- if (thisTime[1] !== 0 && thisTime[1]!==30){
+  })
+  lastTimeArr = timeArr.slice(index);
+  if (thisTime[1] !== 0 && thisTime[1]!==30){
     lastTimeArr.unshift(thisTime[0]+":"+thisTime[1]);
   }
   return lastTimeArr;

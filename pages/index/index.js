@@ -22,10 +22,16 @@ Page({
     showAll:true,
     lists:[],
     curRange:[],
-    curBegin:0,
+    curBegin:0,//起始和结束时间的下标，通过下标查找对应时间
     curFinish:1,
-    remind:[]
+    remind:[],
+    //csl added on 20200327
+    begindate: (new Date()).toLocaleDateString(),
+    begintime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
+    enddate: (new Date()).toLocaleDateString(),
+    endtime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
   },
+  
   //事件处理函数
   bindViewTap: function() {
     wx.navigateTo({
@@ -62,7 +68,7 @@ Page({
   },
   // 用户输入或者点击默认按钮共同引起的输入框变动回调函数
   subIptChange(data) {
-    let timeArr = util.setTimeHalf();
+    let timeArr = util.setTimeHalf();//输出现在以后今天以前所有的半点
     this.setData({
       curIpt: data,
       curRange: timeArr
@@ -79,32 +85,64 @@ Page({
       multiIndex: e.detail.value
     });
   },
+  //初始化表格
   formReset(){
     this.setData({
       curIpt:'',
-      curRange:[]
-    })
+      begindate: (new Date()).toLocaleDateString(),
+      begintime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
+      enddate: (new Date()).toLocaleDateString(),
+      endtime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
+    });
   },
+  //提交表格后的动作
   formSubmit(){
-    let cnt = this.data.curIpt, newLists = this.data.lists, i = newLists.length, begin = this.data.curRange[this.data.curBegin], finish = this.data.curRange[this.data.curFinish], type = this.data.multiIndex; //type为事件类型 
+    let cnt = this.data.curIpt, newLists = this.data.lists, i = newLists.length, begin = this.data.begindate + "-" + this.data.begintime, finish = this.data.enddate + "-" + this.data.endtime, type = this.data.multiIndex; //type为事件类型 
     if (cnt){
        newLists.push({id:i,content:cnt,done:false,beginTime:begin,finishTime:finish,editing:false, type:type});
        this.setData({
         lists:newLists,
-        curIpt:'',
-        multiIndex: [0, 0] //事件类型重置
-      }) 
+        curIpt: '',
+        });
     }
   },
+  /*
+  //修改起始时间后的动作
   beginChange(e){
      this.setData({
       curBegin: e.detail.value,
       curFinish: Number(e.detail.value)+1
     })
   },
+  //修改结束时间后的动作
   finishChange(e){
     this.setData({
       curFinish: e.detail.value
+    })
+  },
+  */
+  //csl added on 20200327
+  //修改起始日期后的动作
+  beginDateChange(e) {
+    this.setData({
+      begindate: e.detail.value,
+    })
+  },
+  //修改起始时间后的动作
+  beginTimeChange(e) {
+    this.setData({
+      begintime: e.detail.value,
+    })
+  },
+  endDateChange(e) {
+    this.setData({
+      enddate: e.detail.value,
+    })
+  },
+  //修改起始时间后的动作
+  endTimeChange(e) {
+    this.setData({
+      endtime: e.detail.value,
     })
   },
   //修改备忘录
