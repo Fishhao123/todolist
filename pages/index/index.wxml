@@ -12,33 +12,28 @@
       <button type="primary" size="mini" plain="true" id="工作" bindtap='defaultButtonOnClick'>工作</button>
       <button type="primary" size="mini" plain="true" id="阅读" bindtap='defaultButtonOnClick'>阅读</button>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">
-        <picker mode="date" value="{{begindate}}" type="begin" bindchange="beginDateChange"  class="pick-time time">
-          <text>
-              开始日期：{{begindate}}
-          </text>
+        <text>开始时间设置：</text>
+        <picker mode="date" value="{{begindate}}" type="begin" bindchange="beginDateChange">
+          <text>{{begindate}}</text>
         </picker>
-        <picker mode="time" value="{{begintime}}" start="{{begindate}}" bindchange="beginTimeChange"  class="pick-time time">
-          <text>
-              开始时间：{{begintime}}
-          </text>
+        <picker mode="time" value="{{begintime}}" bindchange="beginTimeChange">
+          <text>{{begintime}}</text>
         </picker>
-        <picker mode="date" value="{{enddate}}" bindchange="endDateChange"  class="pick-time time">
-          <text>
-              结束日期：{{enddate}}
-          </text>
+      </view>
+      <view class="flex-row flex-time" wx:if="{{curIpt}}">
+        <text>结束时间设置：</text>
+        <picker mode="date" value="{{enddate}}" bindchange="endDateChange">
+          <text>{{enddate}}</text>
         </picker>
-        <picker mode="time" value="{{endtime}}" bindchange="endTimeChange"  class="pick-time time">
-          <text>
-              结束时间：{{endtime}}
-          </text>
+        <picker mode="time" value="{{endtime}}" bindchange="endTimeChange">
+          <text>{{endtime}}</text>
         </picker>
-
-        <label class="time"><switch class="switch" checked bindchange="switch1Change" />提醒</label>
       </view>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">
         <picker mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArray}}">
           <view class="picker">事件类型设置：{{multiArray[0][multiIndex[0]]}} {{multiArray[1][multiIndex[1]]}}</view>
         </picker>
+        <label class="time"><switch class="switch" checked bindchange="switch1Change" />提醒</label>
       </view>
       <view class="flex-row" wx:if="{{curIpt}}">        
         <button class="btn btn-submit" formType="submit" hover-class="btn-hover">提交</button>
@@ -58,7 +53,7 @@
         
         <text style="font-size:12px">\n开始时间<text class="time">{{item.beginTime}}</text></text>
         <text style="font-size:12px">\n结束时间<text class="time">{{item.finishTime}}</text></text>
-        <text style="font-size:12px">\n紧急/重要指示:  </text>
+        <text style="font-size:12px">\n事件类型指示:  </text>
         <icon wx:if="{{item.type[0]===0}}" type="warn" size="20"/>
         <icon wx:if="{{item.type[1]===0}}" type="waiting" size="20"/>
         <!-- <text> {{multiArray[0][item.type[0]]}} {{multiArray[1][item.type[1]]}}</text> -->
