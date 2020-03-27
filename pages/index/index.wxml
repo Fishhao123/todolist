@@ -12,21 +12,26 @@
       <button type="primary" size="mini" plain="true" id="工作" bindtap='defaultButtonOnClick'>工作</button>
       <button type="primary" size="mini" plain="true" id="阅读" bindtap='defaultButtonOnClick'>阅读</button>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">
-        <text>开始时间设置：</text>
-        <picker mode="date" value="{{begindate}}" type="begin" bindchange="beginDateChange">
-          <text>{{begindate}}</text>
+
+        <picker mode="date" start="{{nowdate}}" value="{{begindate}}" type="begin" bindchange="beginDateChange"  class="pick-time time">
+          <text>
+              开始日期：{{begindate}}
+          </text>
         </picker>
-        <picker mode="time" value="{{begintime}}" bindchange="beginTimeChange">
-          <text>{{begintime}}</text>
+        <picker mode="time" start="{{nowtime}}" value="{{begintime}}" bindchange="beginTimeChange"  class="pick-time time">
+          <text>
+              开始时间：{{begintime}}
+          </text>
         </picker>
-      </view>
-      <view class="flex-row flex-time" wx:if="{{curIpt}}">
-        <text>结束时间设置：</text>
-        <picker mode="date" value="{{enddate}}" bindchange="endDateChange">
-          <text>{{enddate}}</text>
+        <picker mode="date" start="{{enddate}}" value="{{enddate}}" bindchange="endDateChange"  class="pick-time time">
+          <text>
+              结束日期：{{enddate}}
+          </text>
         </picker>
-        <picker mode="time" value="{{endtime}}" bindchange="endTimeChange">
-          <text>{{endtime}}</text>
+        <picker mode="time" start="{{endtime}}" value="{{endtime}}" bindchange="endTimeChange"  class="pick-time time">
+          <text>
+              结束时间：{{endtime}}
+          </text>
         </picker>
       </view>
       <view class="flex-row flex-time" wx:if="{{curIpt}}">

@@ -31,10 +31,12 @@ Page({
     curFinish:1,
     remind:[],
     //csl added on 20200327
-    begindate: (new Date()).toLocaleDateString(),
-    begintime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
-    enddate: (new Date()).toLocaleDateString(),
-    endtime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
+    nowdate: '',
+    nowtime: '',
+    begindate: '',
+    begintime: '',
+    enddate: '',
+    endtime: '',
   },
   
   //事件处理函数
@@ -62,6 +64,17 @@ Page({
       that.setData({
         userInfo:userInfo
       })
+    })
+    //初始化几个默认时间
+    var now = new Date(), minutelater = new Date();
+    minutelater.setMinutes(minutelater.getMinutes() + 1);
+    that.setData({
+      nowdate: (now).getFullYear() + '-' + ('00' + ((now).getMonth() + 1)).slice(-2) + '-' + ('00' + (now).getDate()).slice(-2),
+      nowtime: ('00' + (now).getHours()).slice(-2) + ':' + ('00' + (now).getMinutes()).slice(-2),
+      begindate: (now).getFullYear() + '-' + ('00' + ((now).getMonth() + 1)).slice(-2) + '-' + ('00' + (now).getDate()).slice(-2),
+      begintime: ('00' + (now).getHours()).slice(-2) + ':' + ('00' + (now).getMinutes()).slice(-2),
+      enddate: (minutelater).getFullYear() + '-' + ('00' + ((minutelater).getMonth() + 1)).slice(-2) + '-' + ('00' + (minutelater).getDate()).slice(-2),
+      endtime: ('00' + (minutelater).getHours()).slice(-2) + ':' + ('00' + ((minutelater).getMinutes())).slice(-2),
     })
   },
   // watch: {
@@ -106,16 +119,21 @@ Page({
   },
   //初始化表格
   formReset(){
+    var now = new Date(), minutelater = new Date();
+    minutelater.setMinutes(minutelater.getMinutes() + 1);
     this.setData({
       curIpt:'',
-      begindate: (new Date()).toLocaleDateString(),
-      begintime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
-      enddate: (new Date()).toLocaleDateString(),
-      endtime: (new Date()).getHours() + ':' + (new Date()).getMinutes(),
+      nowdate: (now).getFullYear() + '-' + ('00' + ((now).getMonth() + 1)).slice(-2) + '-' + ('00' + (now).getDate()).slice(-2),
+      nowtime: ('00' + (now).getHours()).slice(-2) + ':' + ('00' + (now).getMinutes()).slice(-2),
+      begindate: (now).getFullYear() + '-' + ('00' + ((now).getMonth() + 1)).slice(-2) + '-' + ('00' + (now).getDate()).slice(-2),
+      begintime: ('00' + (now).getHours()).slice(-2) + ':' + ('00' + (now).getMinutes()).slice(-2),
+      enddate: (minutelater).getFullYear() + '-' + ('00' + ((minutelater).getMonth() + 1)).slice(-2) + '-' + ('00' + (minutelater).getDate()).slice(-2),
+      endtime: ('00' + (minutelater).getHours()).slice(-2) + ':' + ('00' + ((minutelater).getMinutes())).slice(-2),
     });
   },
   //提交表格后的动作
   formSubmit(){
+    console.log(typeof(this.data.begintime))
     let cnt = this.data.curIpt, newLists = this.data.lists, i = newLists.length, begin = this.data.begindate + "-" + this.data.begintime, finish = this.data.enddate + "-" + this.data.endtime, type = this.data.multiIndex; //type为事件类型 
     if (cnt){
        newLists.push({id:i,content:cnt,done:false,beginTime:begin,finishTime:finish,editing:false, type:type});
@@ -143,14 +161,22 @@ Page({
   //csl added on 20200327
   //修改起始日期后的动作
   beginDateChange(e) {
+    var minutelater = new Date(new Date(e.detail.value + ' ' + this.data.begintime));
+    minutelater.setMinutes(minutelater.getMinutes() + 1);
     this.setData({
       begindate: e.detail.value,
+      enddate: (minutelater).getFullYear() + '-' + ('00' + ((minutelater).getMonth() + 1)).slice(-2) + '-' + ('00' + (minutelater).getDate()).slice(-2),
+      endtime: ('00' + (minutelater).getHours()).slice(-2) + ':' + ('00' + ((minutelater).getMinutes())).slice(-2),
     })
   },
   //修改起始时间后的动作
   beginTimeChange(e) {
+    var minutelater = new Date(new Date(this.data.enddate + ' ' + e.detail.value));
+    minutelater.setMinutes(minutelater.getMinutes() + 1);
     this.setData({
       begintime: e.detail.value,
+      enddate: (minutelater).getFullYear() + '-' + ('00' + ((minutelater).getMonth() + 1)).slice(-2) + '-' + ('00' + (minutelater).getDate()).slice(-2),
+      endtime: ('00' + (minutelater).getHours()).slice(-2) + ':' + ('00' + ((minutelater).getMinutes())).slice(-2),
     })
   },
   endDateChange(e) {
