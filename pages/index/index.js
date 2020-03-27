@@ -241,7 +241,7 @@ Page({
     _this.setData({
       sortStyle: sortStyle
     });
-    console.log("排序方式：" + sortStyle)
+    // console.log("排序方式：" + sortStyle)
     let resultList = [];
     if (sortStyle == 0){ // 默认排序
       resultList = _this.data.lists.sort(_this.sortBy('id'));
@@ -253,7 +253,7 @@ Page({
     _this.setData({ // 赋值改变原列表顺序
       lists: resultList
     });
-    console.log(resultList)
+    // console.log(resultList)
   },
   sortBy(props){
     return function (b, a) {
@@ -273,21 +273,42 @@ Page({
   },
   sortByTime(props) {
     return function (b, a) {
-      console.log(time1)
-      let time1 = a[props].split(":");
-      let time2 = b[props].split(":");
-      console.log(time1)
-      console.log(time2)
+      let time1 = a[props].split("-"); // 更改：加上了年月日
+      let time2 = b[props].split("-");
+
+      let yearMonthDay1 = time1[0].split('/'); // 数组：年月日,例['2020','3','27']
+      let hourMin1 = time1[1].split(':'); // 数组：时分,例['20','48']
+      let yearMonthDay2 = time2[0].split('/'); // 年月日
+      let hourMin2 = time2[1].split(':'); // 年月日
       let result = 0;
-      if (parseInt(time1[0]) < parseInt(time2[0])){
-        result = 1; // 小的时间在前，不用换
-      }else if (parseInt(time1[0]) > parseInt(time2[0])){
-        result = -1; // 反之需要交换
-      }else{ // 当时钟相等时比较分钟
-        if (parseInt(time1[1]) < parseInt(time2[1])){
-          result = 1; // 不用换
-        }else{
+
+      if (parseInt(yearMonthDay1[0]) < parseInt(yearMonthDay2[0])){
+        result = 1;
+      } else if (parseInt(yearMonthDay1[0]) > parseInt(yearMonthDay2[0])){
+        result = -1;
+      } else { //年份一样再比较月份
+        if (parseInt(yearMonthDay1[1]) < parseInt(yearMonthDay2[1])){
+          result = 1;
+        } else if (parseInt(yearMonthDay1[1]) > parseInt(yearMonthDay2[1])){
           result = -1;
+        } else { //月份一样再比较天
+          if (parseInt(yearMonthDay1[2]) < parseInt(yearMonthDay2[2])) {
+            result = 1;
+          } else if (parseInt(yearMonthDay1[2]) > parseInt(yearMonthDay2[2])) {
+            result = -1;
+          } else { //天一样比较时间
+            if (parseInt(hourMin1[0]) < parseInt(hourMin2[0])) {
+              result = 1; // 小的时间在前，不用换
+            } else if (parseInt(hourMin1[0]) > parseInt(hourMin2[0])) {
+              result = -1; // 反之需要交换
+            } else { // 当时钟相等时比较分钟
+              if (parseInt(hourMin1[1]) < parseInt(hourMin2[1])) {
+                result = 1; // 不用换
+              } else {
+                result = -1;
+              }
+            }
+          }
         }
       }
       return result; 
