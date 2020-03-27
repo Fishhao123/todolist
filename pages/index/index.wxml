@@ -62,7 +62,7 @@
     </view>
     <view class="footer">
         <view class="ft-area">
-            <text class="ft-action">{{lists.length}}条</text>
+            <text class="ft-action">共{{lists.length}}条</text>
         </view>
         <view class="ft-area">
             <text bindtap="changeSortStyle" class="ft-action">{{sortWord[sortStyle]}}</text>
@@ -79,7 +79,7 @@
     <view class="footer">
       <view class="ft-area">
         <text bindtap="doneAll" class="ft-action">全部完成</text>
-        <text bindtap="deleteAll" class="ft-action">全删</text>
+        <text bindtap="deleteAll" class="ft-action">全部删除</text>
       </view>
     </view>
   </view>
